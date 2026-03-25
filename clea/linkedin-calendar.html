@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clea Design — LinkedIn Content Calendar</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0f0f;
+    --paper: #faf9f7;
+    --warm: #f5f0e8;
+    --accent: #e85d26;
+    --accent2: #2b5be8;
+    --accent3: #2d8a5e;
+    --muted: #888;
+    --border: #e0dbd2;
+    --card-bg: #ffffff;
+    --tag-thought: #fff0eb;
+    --tag-thought-fg: #e85d26;
+    --tag-case: #ebf0ff;
+    --tag-case-fg: #2b5be8;
+    --tag-edu: #ebf7f2;
+    --tag-edu-fg: #2d8a5e;
+    --tag-brand: #fdf4e3;
+    --tag-brand-fg: #b07d00;
+    --tag-engage: #f5ebff;
+    --tag-engage-fg: #7b2de8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--ink);
+    color: #fff;
+    padding: 48px 48px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232,93,38,0.18) 0%, transparent 70%);
+  }
+  .header-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 2px;
+    margin-bottom: 18px;
+  }
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 4vw, 46px);
+    line-height: 1.1;
+    font-weight: 400;
+    margin-bottom: 10px;
+    letter-spacing: -0.02em;
+  }
+  .header h1 em { color: var(--accent); font-style: italic; }
+  .header p {
+    color: rgba(255,255,255,0.55);
+    font-size: 14px;
+    max-width: 540px;
+    margin-bottom: 28px;
+  }
+  .header-meta {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .header-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .header-stat span:first-child {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    color: #fff;
+  }
+  .header-stat span:last-child {
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* STRATEGY OVERVIEW */
+  .strategy {
+    padding: 36px 48px;
+    background: var(--warm);
+    border-bottom: 1px solid var(--border);
+  }
+  .strategy h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 18px;
+    letter-spacing: -0.01em;
+  }
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+  }
+  .pillar {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .pillar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    border-radius: 8px 0 0 8px;
+  }
+  .pillar.p1::before { background: var(--accent); }
+  .pillar.p2::before { background: var(--accent2); }
+  .pillar.p3::before { background: var(--accent3); }
+  .pillar.p4::before { background: #b07d00; }
+  .pillar.p5::before { background: #7b2de8; }
+  .pillar-icon { font-size: 20px; margin-bottom: 8px; }
+  .pillar-name { font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+  .pillar-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .pillar-pct {
+    position: absolute;
+    top: 14px; right: 14px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  /* FILTERS */
+  .controls {
+    padding: 20px 48px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    background: var(--card-bg);
+  }
+  .controls-label { font-size: 12px; font-weight: 500; color: var(--muted); margin-right: 4px; }
+  .filter-btn {
+    border: 1.5px solid var(--border);
+    background: transparent;
+    border-radius: 100px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.18s;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .filter-btn:hover { border-color: var(--ink); }
+  .filter-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  /* WEEK SECTIONS */
+  .calendar-body {
+    padding: 32px 48px 64px;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+  .week-block { margin-bottom: 48px; }
+  .week-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+  .week-label {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+  .week-theme {
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--warm);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 3px 12px;
+    font-weight: 500;
+  }
+  .week-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* POSTS GRID */
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+
+  /* POST CARD */
+  .post-card {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .post-card:hover {
+    border-color: var(--ink);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+  }
+  .post-card.hidden { display: none; }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .card-day {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .card-type {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .type-thought { background: var(--tag-thought); color: var(--tag-thought-fg); }
+  .type-case { background: var(--tag-case); color: var(--tag-case-fg); }
+  .type-edu { background: var(--tag-edu); color: var(--tag-edu-fg); }
+  .type-brand { background: var(--tag-brand); color: var(--tag-brand-fg); }
+  .type-engage { background: var(--tag-engage); color: var(--tag-engage-fg); }
+
+  .card-hook {
+    font-family: 'DM Serif Display', serif;
+    font-size: 16px;
+    line-height: 1.35;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+  .card-angle {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .card-format {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 500;
+    margin-top: auto;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+  .card-format span:first-child { font-size: 14px; }
+
+  .card-expand {
+    display: none;
+    margin-top: 4px;
+  }
+  .post-card.expanded .card-expand { display: block; }
+  .card-expand-body {
+    background: var(--warm);
+    border-radius: 6px;
+    padding: 14px;
+    font-size: 12.5px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    color: #333;
+    border: 1px solid var(--border);
+  }
+  .card-expand-body strong { color: var(--ink); font-weight: 600; }
+  .expand-hint {
+    font-size: 11px;
+    color: var(--muted);
+    text-align: right;
+    margin-top: 4px;
+    font-style: italic;
+  }
+  .cta-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .cta-chip {
+    background: var(--ink);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 4px;
+    padding: 4px 10px;
+    letter-spacing: 0.05em;
+  }
+  .hashtag-row {
+    font-size: 11px;
+    color: var(--accent2);
+    margin-top: 6px;
+    line-height: 1.8;
+  }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 32px 48px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .footer a { color: var(--accent); text-decoration: none; }
+
+  /* LEGEND */
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 16px 48px;
+    border-bottom: 1px solid var(--border);
+    background: var(--warm);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 2px;
+  }
+
+  @media (max-width: 700px) {
+    .header, .strategy, .controls, .calendar-body, .legend, .footer { padding-left: 20px; padding-right: 20px; }
+    .posts-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-tag">LinkedIn Content Calendar · Q2 2025</div>
+  <h1>Clea Design<br><em>Design-Led Growth</em> Content Playbook</h1>
+  <p>A 4-week LinkedIn calendar built around Clea's unique positioning — where strategic design meets startup growth. Every post earns attention and drives inbound.</p>
+  <div class="header-meta">
+    <div class="header-stat"><span>20</span><span>Posts / Month</span></div>
+    <div class="header-stat"><span>5</span><span>Content Pillars</span></div>
+    <div class="header-stat"><span>4</span><span>Weeks</span></div>
+    <div class="header-stat"><span>Mon–Fri</span><span>Cadence</span></div>
+  </div>
+</div>
+
+<div class="strategy">
+  <h2>Content Strategy Pillars</h2>
+  <div class="pillars">
+    <div class="pillar p1">
+      <div class="pillar-pct">30%</div>
+      <div class="pillar-icon">💡</div>
+      <div class="pillar-name">Thought Leadership</div>
+      <div class="pillar-desc">Design-meets-growth POVs that challenge conventional startup thinking</div>
+    </div>
+    <div class="pillar p2">
+      <div class="pillar-pct">25%</div>
+      <div class="pillar-icon">📂</div>
+      <div class="pillar-name">Proof & Case Studies</div>
+      <div class="pillar-desc">Before/after results, client stories, design decisions that moved metrics</div>
+    </div>
+    <div class="pillar p3">
+      <div class="pillar-pct">20%</div>
+      <div class="pillar-icon">🎓</div>
+      <div class="pillar-name">Education & Frameworks</div>
+      <div class="pillar-desc">Actionable how-tos — design audits, SEO, conversion, AEO frameworks</div>
+    </div>
+    <div class="pillar p4">
+      <div class="pillar-pct">15%</div>
+      <div class="pillar-icon">🔥</div>
+      <div class="pillar-name">Brand & Culture</div>
+      <div class="pillar-desc">Behind-the-scenes, team moments, Clea's design philosophy in action</div>
+    </div>
+    <div class="pillar p5">
+      <div class="pillar-pct">10%</div>
+      <div class="pillar-icon">🤝</div>
+      <div class="pillar-name">Engagement Bait</div>
+      <div class="pillar-desc">Polls, hot takes, "fight me on this" posts that invite founders to respond</div>
+    </div>
+  </div>
+</div>
+
+<div class="legend">
+  <span style="font-size:11px;font-weight:600;color:var(--muted);margin-right:4px;">POST TYPE:</span>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--tag-thought-fg)"></div><span>Thought Leadership</span></div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--tag-case-fg)"></div><span>Case Study / Proof</span></div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--tag-edu-fg)"></div><span>Education</span></div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--tag-brand-fg)"></div><span>Brand & Culture</span></div>
+  <div class="legend-item"><div class="legend-dot" style="background:#7b2de8)"></div><span>Engagement</span></div>
+  <span style="font-size:11px;color:var(--muted);margin-left:12px;">↓ Click any card to expand the full post draft</span>
+</div>
+
+<div class="controls">
+  <span class="controls-label">Filter by:</span>
+  <button class="filter-btn active" onclick="filterCards('all')">All Posts</button>
+  <button class="filter-btn" onclick="filterCards('thought')">Thought Leadership</button>
+  <button class="filter-btn" onclick="filterCards('case')">Case Study</button>
+  <button class="filter-btn" onclick="filterCards('edu')">Education</button>
+  <button class="filter-btn" onclick="filterCards('brand')">Brand</button>
+  <button class="filter-btn" onclick="filterCards('engage')">Engagement</button>
+</div>
+
+<div class="calendar-body">
+
+  <!-- WEEK 1 -->
+  <div class="week-block">
+    <div class="week-header">
+      <span class="week-label">Week 1</span>
+      <span class="week-theme">🚀 "Design as a Growth Lever"</span>
+      <div class="week-line"></div>
+    </div>
+    <div class="posts-grid">
+
+      <div class="post-card" data-type="thought" onclick="toggleCard(this)">
+        <div class="card-top">
+          <span class="card-day">Monday</span>
+          <span class="card-type type-thought">Thought Leadership</span>
+        </div>
+        <div class="card-hook">Most startups treat design like decoration. The ones that grow treat it like infrastructure.</div>
+        <div class="card-angle">Bold opener that reframes what "design-led" actually means for growth</div>
+        <div class="card-format"><span>📝</span> Text post — narrative hook</div>
+        <div class="card-expand">
+          <div class="card-expand-body">Most startups treat design like decoration.
+
+A nice logo. A clean Figma file. A homepage that "looks professional."
+
+The ones that actually grow? They treat design like infrastructure.
+
+Here's what that looks like in practice:
+
+→ Landing page copy written *after* the visual hierarchy is set (not before)
+→ CTAs designed to match the psychology of the ICP — not just placed above the fold
+→ SEO architecture built into the site structure from day one
+→ Every visual asset serving a conversion goal, not just an aesthetic one
+
+Design-led growth isn't about making things pretty.
+
+It's about making things work.
+
+If your website looks polished but your trial signups are flat, the problem isn't your traffic strategy.
+
+It's your design strategy.
+
+What's your experience — design first or copy first?</div>
+          <div class="hashtag-row">#DesignLedGrowth #StartupMarketing #GrowthDesign #B2BMarketing</div>
+          <div class="cta-row"><span class="cta-chip">Ask a question</span><span class="cta-chip">Spark debate</span></div>
+          <div class="expand-hint">Click again to collapse</div>
+        </div>
+      </div>
+
+      <div class="post-card" data-type="edu" onclick="toggleCard(this)">
+        <div class="card-top">
+          <span class="card-day">Tuesday</span>
+          <span class="card-type type-edu">Education</span>
+        </div>
+        <div class="card-hook">The 5-part design audit every pre-seed startup should run before spending on ads</div>
+        <div class="card-angle">Practical framework post — high save/share potential</div>
+        <div class="card-format"><span>📋</span> Listicle / Framework — carousel or text</div>
+        <div class="card-expand">
+          <div class="card-expand-body">Before you spend a single rupee (or dollar) on paid ads —
+
+Run this 5-part design audit on your site:
+
+<strong>1. The 5-second test</strong>
+Can a stranger tell what you do, who it's for, and what to do next — in 5 seconds? If not, your hero section needs a rewrite. Not more traffic.
+
+<strong>2. CTA visibility</strong>
+Is your primary CTA above the fold on mobile? Is it one clear action — not three? "Get started", "Book a call", and "Learn more" on the same screen = decision paralysis.
+
+<strong>3. Visual hierarchy check</strong>
+Where does the eye land first? Does it guide toward conversion or toward your nav bar?
+
+<strong>4. Trust signal audit</strong>
+Social proof at the point of decision — not buried at the bottom. Logos, outcomes, testimonials close to CTAs.
+
+<strong>5. Page speed reality check</strong>
+If your LCP is above 3 seconds, you're losing 30%+ of visitors before they read a single word.
+
+Design problems masquerade as traffic problems all the time.
+
+Fix the design. Then buy the ads.
+
+Save this for your next site review.</div>
+          <div class="hashtag-row">#StartupTips #WebDesign #CRO #GrowthMarketing #DesignAudit</div>
+          <div class="cta-row"><span class="cta-chip">Save bait</span><span class="cta-chip">Share-worthy</span></div>
+          <div class="expand-hint">Click again to collapse</div>
+        </div>
+      </div>
+
+      <div class="post-card" data-type="case" onclick="toggleCard(this)">
+        <div class="card-top">
+          <span class="card-day">Wednesday</span>
+          <span class="card-type type-case">Case Study</span>
+        </div>
+        <div class="card-hook">We redesigned a SaaS homepage. Trial signups went up 38% — without changing the ad spend.</div>
+        <div class="card-angle">Result-led proof — the money post of the week</div>
+        <div class="card-format"><span>📊</span> Before/After — image or text narrative</div>
+        <div class="card-expand">
+          <div class="card-expand-body">A B2B SaaS founder came to us frustrated.
+
+Good product. Growing team. Decent traffic.
+But trial signups were flat.
+
+They assumed the problem was their SEO.
+
+We looked at their site for 15 minutes and found it.
+
+The homepage had:
+— 3 competing CTAs above the fold
+— A headline that led with the feature, not the outcome
+— Social proof logos placed *below* the pricing section
+— A hero image that showed the product UI (which told visitors nothing about the result)
+
+We didn't touch their ad campaigns.
+
+We redesigned the homepage with:
+→ One clear CTA: "Start your free trial"
+→ Headline rewritten to lead with the outcome: "Close 40% more deals without adding headcount"
+→ 3 customer logos moved directly under the hero, with one-line result quotes
+→ Hero swapped for a 12-second screen recording of the product in action
+
+Result: 38% more trial signups. Same traffic. Same budget.
+
+Design is a conversion lever.
+Most startups treat it like a branding expense.
+
+If your homepage isn't converting, DM me. Happy to do a quick audit.</div>
+          <div class="hashtag-row">#CaseStudy #GrowthMarketing #SaaSGrowth #ConversionOptimization #DesignROI</div>
+          <div class="cta-row"><span class="cta-chip">Social proof</span><span class="cta-chip">Soft pitch</span></div>
+          <div class="expand-hint">Click again to collapse</div>
+        </div>
+      </div>
+
+      <div class="post-card" data-type="brand" onclick="toggleCard(this)">
+        <div class="card-top">
+          <span class="card-day">Thursday</span>
+          <span class="card-type type-brand">Brand & Culture</span>
+        </div>
+        <div class="card-hook">Why we named it Clea — and what "design-led growth" actually means to us</div>
+        <div class="card-angle">Origin story / founder moment — humanizes the brand</div>
+        <div class="card-format"><span>✍️</span> Founder story — text narrative</div>
+        <div class="card-expand">
+          <div class="card-expand-body">When we started Clea, a lot of people asked: "Why not just call it a growth agency?"
+
+Because growth without design is just noise.
+
+We've seen it too many times. Startups with brilliant products, ambitious founders, and generous ad budgets — but a website that erodes trust before a visitor finishes scrolling.
+
+The name Clea comes from clarity. Clear thinking. Clear design. Clear growth paths.
+
+We believe the best growth strategies don't look like marketing. They look like great product experiences — from the landing page to the onboarding flow to the first email a new user receives.
+
+Design-led growth means every visual decision has a business rationale. Every content piece has a conversion goal. Every pixel earns its place.
+
+We're a small, focused team. We work with early-stage startups who are ready to stop guessing and start compounding.
+
+If that resonates, follow along. We're going to share everything we learn here.
+
+What does "design-led" mean to you?</div>
+          <div class="hashtag-row">#FounderStory #AgencyLife #DesignPhilosophy #StartupMarketing</div>
+          <div class="cta-row"><span class="cta-chip">Community builder</span><span class="cta-chip">Trust signal</span></div>
+          <div class="expand-hint">Click again to collapse</div>
+        </div>
+      </div>
+
+      <div class="post-card" data-type="engage" onclick="toggleCard(this)">
+        <div class="card-top">
+          <span class="card-day">Friday</span>
+          <span class="card-type type-engage">Engagement</span>
+        </div>
+        <div class="card-hook">Hot take: You shouldn't run ads until your homepage converts at 3%+. Agree or fight me.</div>
+        <div class="card-angle">Provocative Friday post — maximum comment potential</div>
+        <div class="card-format"><span>🔥</span> Hot take / Poll</div>
+        <div class="card-expand">
+          <div class="card-expand-body">Controversial take incoming 👇
+
+You should NOT run ads until your homepage converts at 3% or above.
+
+Here's my reasoning:
+
+If 97 out of 100 organic visitors leave without acting — and you pour paid traffic on top of that — you're just subsidizing your bounce rate.
+
+Fix the funnel first. Then step on the gas.
+
+Most startup founders I talk to are treating paid ads as a demand-generation tool when their real problem is a conversion problem.
+
+The ad spend isn't the bottleneck.
+The landing page is.
+
+Fight me on this (or validate me — both welcome) ⬇️
+
+P.S. What's your current homepage conversion rate? Honest answers only.</div>
+          <div class="hashtag-row">#MarketingStrategy #StartupGrowth #GrowthHacking #PaidAds #Founders</div>
+          <div class="cta-row"><span class="cta-chip">Comment driver</span><span class="cta-chip">High reach</span></div>
+          <div class="expand-hint">Click again to collapse</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- WEEK 2 -->
+  <div class="week-block">
+    <div class="week-header">
+      <span class="week-label">Week 2</span>
+      <span class="week-theme">🔍 "SEO Meets Design"</span>
+      <div class="week-line"></div>
+    </div>
+    <div class="posts-grid">
+
+      <div class="post-card" data-type="thought" onclick="toggleCard(this)">
+        <div class="card-top">
+          <span class="card-day">Monday</span>
+          <span class="card-type type-thought">Thought Leadership</span>
+        </div>
+        <div class="card-hook">SEO is dead. AEO is the new game. Here's what that means for startup websites in 2025.</div>
+        <div class="card-angle">Timely take on the AI search shift — establishes authority</div>
+        <div class="card-format"><span>📝</span> Text post — POV opener</div>
+        <div class="card-expand">
+          <div class="card-expand-body">SEO as we knew it is quietly dying.
+
+Not because Google is failing — but because how people search is changing completely.
+
+ChatGPT. Perplexity. Google's AI Overviews. Claude.
+
+Your customers are asking questions and getting answers without ever clicking a link.
+
+That's the shift: from Search Engine Optimization to Answer Engine Optimization.
+
+For startup websites, this changes everything:
+
+→ Your homepage needs to answer "what is [your product]" clearly enough for AI to cite you
+→ Your FAQ sections need to be structured with schema markup — not just paragraph text
+→ Your content needs to sound like an expert explaining to a smart person, not keyword-stuffed blog filler
+→ Your brand needs enough online presence that AI models feel confident referencing you
+
+We're helping our clients rebuild their site architecture for this world.
+
+The startups that adapt now will be the ones AI search surfaces in 2026.
+
+The ones that don't will wonder why their traffic dropped.
+
+Are you optimizing for AEO yet?</div>
+          <div class="hashtag-row">#AEO #SEO #AISearch #StartupMarketing #GEO #DigitalMarketing</div>
+          <div class="cta-row"><span class="cta-chip">Trend POV</span><span class="cta-chip">Authority signal</span></div>
+          <div class="expand-hint">Click again to collapse</div>
+        </div>
+      </div>
+
+      <div class="post-card" data-type="edu" onclick="toggleCard(this)">
+        <div class="card-top">
+          <span class="card-day">Tuesday</span>
+          <span class="card-type type-edu">Education</span>
+        </div>
+        <div class="card-hook">The 6 schema markup types every SaaS startup website needs (and most miss)</div>
+        <div class="card-angle">Tactical SEO content — extremely saveable for founders and dev teams</div>
+        <div class="card-format"><span>📋</span> Listicle — high save potential</div>
+        <div class="card-expand">
+          <div class="card-expand-body">If your SaaS site doesn't have structured data, AI search engines can't easily cite you.
+
+Here are the 6 schema types your startup website needs in 2025:
+
+<strong>1. Organization schema</strong>
+Your company name, URL, logo, social profiles. The baseline. Missing on ~60% of startup sites.
+
+<strong>2. SoftwareApplication schema</strong>
+Tells AI what your product does, its category, price range, and platform. Critical for AEO.
+
+<strong>3. FAQPage schema</strong>
+Wraps your FAQ content in a format AI search can directly quote. Each Q&A becomes a citable answer.
+
+<strong>4. HowTo schema</strong>
+Perfect for tutorial content and onboarding guides. Google and AI surfaces love step-by-step structure.
+
+<strong>5. Review / AggregateRating schema</strong>
+Pull in your G2, Capterra, or Trustpilot ratings as rich signals. Massive trust boost in AI summaries.
+
+<strong>6. BreadcrumbList schema</strong>
+Helps AI understand your site structure and content hierarchy. Often ignored. Rarely optional.
+
+Adding these takes a few hours of dev time or a plugin install.
+
+The compounding SEO and AEO benefit lasts for years.
+
+Want a free schema audit for your site? Drop your URL in the comments.</div>
+          <div class="hashtag-row">#Schema #TechnicalSEO #AEO #SaaS #StartupMarketing #GrowthHacking</div>
+          <div class="cta-row"><span class="cta-chip">Lead gen CTA</span><span class="cta-chip">Save bait</span></div>
+          <div class="expand-hint">Click again to collapse</div>
+        </div>
+      </div>
+
+      <div class="post-card" data-type="case" onclick="toggleCard(this)">
+        <div class="card-top">
+          <span class="card-day">Wednesday</span>
+          <span class="card-type type-case">Case Study</span>
+        </div>
+        <div class="card-hook">A startup came to us with 3,200 monthly visitors and 4 leads. Here's what we found in 45 minutes.</div>
+        <div class="card-angle">Diagnostic story — relatability + credibility combo</div>
+        <div class="card-format"><span>📊</span> Audit narrative</div>
+        <div class="card-expand">
+          <div class="card-expand-body">3,200 monthly visitors. 4 leads. No paid ads.
+
+That's not a traffic problem.
+
+We did a 45-minute design and SEO audit and here's what we found:
+
+<strong>Problem 1: No lead capture above the fold</strong>
+Their email form was buried at the bottom of the page. 78% of visitors never scroll that far.
+Fix: Added an inline form in the hero section with one field (email). Not a popup. A promise.
+
+<strong>Problem 2: Blog content with zero internal links</strong>
+They had 14 blog posts, none linking to the product pages. Pure content island.
+Fix: Added contextual CTAs and product page links inside every post.
+
+<strong>Problem 3: Zero FAQ schema</strong>
+They had an FAQ section — but no structured data. AI search couldn't read it.
+Fix: Added FAQPage schema in 2 hours of dev time.
+
+<strong>Problem 4: Page speed killing mobile bounce</strong>
+Mobile LCP was 6.2 seconds. Half their traffic was mobile.
+Fix: Compressed images, deferred scripts. LCP dropped to 2.4s.
+
+Result 6 weeks later: 47 leads from the same 3,200 monthly visitors.
+
+Same traffic. Different design and structure.
+
+That's the job.</div>
+          <div class="hashtag-row">#SEOAudit #CRO #StartupGrowth #DigitalMarketing #LeadGeneration</div>
+          <div class="cta-row"><span class="cta-chip">Diagnostic story</span><span class="cta-chip">Inbound driver</span></div>
+          <div class="expand-hint">Click again to collapse</div>
+        </div>
+      </div>
+
+      <div class="post-card" data-type="brand" onclick="toggleCard(this)">
+        <div class="card-top">
+          <span class="card-day">Thursday</span>
+          <span class="card-type type-brand">Brand & Culture</span>
+        </div>
+        <div class="card-hook">What our client discovery process actually looks like (it's not a questionnaire)</div>
+        <div class="card-angle">Behind-the-scenes — shows process, builds trust</div>
+        <div class="card-format"><span>🎬</span> Process reveal — text or short video</div>
+        <div class="card-expand">
+          <div class="card-expand-body">Most agencies send you a 40-question onboarding form.
+
+We do something different.
+
+Our first client session is a 60-minute live site teardown.
+
+No questionnaire. No "tell us about your brand." We go straight to what's broken.
+
+Here's what we look at in real time:
+
+→ Your homepage on mobile (because that's how most of your visitors see it)
+→ Your organic traffic vs. your conversion rate (the gap tells us everything)
+→ Your competitor's site (because differentiation requires context)
+→ Your top 3 landing pages in Google Search Console
+
+By the end of the session, we've identified 3–5 things that are actively costing you leads right now.
+
+Then we build the roadmap.
+
+No fluff. No 12-week "brand discovery" phase.
+
+Design-led growth moves fast.
+
+That's how we work.
+
+Want to see what 60 minutes with Clea looks like? DM me "audit" and I'll share the details.</div>
+          <div class="hashtag-row">#AgencyLife #ClientWork #GrowthMarketing #StartupAgency</div>
+          <div class="cta-row"><span class="cta-chip">DM prompt</span><span class="cta-chip">Process story</span></div>
+          <div class="expand-hint">Click again to collapse</div>
+        </div>
+      </div>
+
+      <div class="post-card" data-type="engage" onclick="toggleCard(this)">
+        <div class="card-top">
+          <span class="card-day">Friday</span>
+          <span class="card-type type-engage">Engagement</span>
+        </div>
+        <div class="card-hook">Poll: What's the biggest growth problem for your startup right now?</div>
+        <div class="card-angle">Audience intelligence + community building</div>
+        <div class="card-format"><span>📊</span> LinkedIn Poll</div>
+        <div class="card-expand">
+          <div class="card-expand-body">Quick Friday poll for founders and startup marketers 👇
+
+What's your biggest growth challenge right now?
+
+🔵 Not enough traffic
+🟠 Traffic but low conversions
+🟢 Leads but low close rate
+🟣 Great product, weak brand presence
+
+(Voting anonymously is fine. I'll share what we're seeing across the options on Monday.)
+
+This helps us understand where founders are genuinely stuck — and shapes the content we create here.
+
+Drop a comment if your answer is "all of the above." That's usually where the most interesting conversations start.</div>
+          <div class="hashtag-row">#StartupGrowth #Founders #B2BMarketing #GrowthStrategy</div>
+          <div class="cta-row"><span class="cta-chip">Data collection</span><span class="cta-chip">Monday follow-up loop</span></div>
+          <div class="expand-hint">Click again to collapse</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- WEEK 3 -->
+  <div class="week-block">
+    <div class="week-header">
+      <span class="week-label">Week 3</span>
+      <span class="week-theme">💸 "Design That Converts"</span>
+      <div class="week-line"></div>
+    </div>
+    <div class="posts-grid">
+
+      <div class="post-card" data-type="thought" onclick="toggleCard(this)">
+        <div class="card-top">
+          <span class="card-day">Monday</span>
+          <span class="card-type type-thought">Thought Leadership</span>
+        </div>
+        <div class="card-hook">Your startup's biggest competitor isn't another product. It's visitor confusion.</div>
+        <div class="card-angle">Reframe post — shifts how founders think about conversion problems</div>
+        <div class="card-format"><span>📝</span> Contrarian POV</div>
+        <div class="card-expand">
+          <div class="card-expand-body">Founders spend so much time tracking their competitors.
+
+Watching their pricing. Copying their features. Worrying about their funding.
+
+But the thing that's actually killing most early-stage startup growth?
+
+Visitor confusion.
+
+A person lands on your site.
+They're the right ICP.
+They have the problem you solve.
+They have budget.
+
+And they leave in 8 seconds because your homepage doesn't answer three questions fast enough:
+
+1. What exactly is this?
+2. Is it for me?
+3. What do I do next?
+
+That's not a traffic problem.
+That's not a competitor problem.
+That's a clarity problem.
+
+And clarity is a design problem.
+
+The best-converting startup websites I've seen aren't the prettiest. They're the most honest. They speak directly to one person about one problem.
+
+Who is your homepage speaking to right now?</div>
+          <div class="hashtag-row">#Conversion #DesignThinking #StartupMarketing #CRO #Founders</div>
+          <div class="cta-row"><span class="cta-chip">Reframe post</span><span class="cta-chip">Thought-provoking</span></div>
+          <div class="expand-hint">Click again to collapse</div>
+        </div>
+      </div>
+
+      <div class="post-card" data-type="edu" onclick="toggleCard(this)">
+        <div class="card-top">
+          <span class="card-day">Tuesday</span>
+          <span class="card-type type-edu">Education</span>
+        </div>
+        <div class="card-hook">The homepage hierarchy formula we use for every startup client (steal this)</div>
+        <div class="card-angle">Tactical framework — extremely high save rate</div>
+        <div class="card-format"><span>📋</span> Framework post — carousel-ready</div>
+        <div class="card-expand">
+          <div class="card-expand-body">We've audited 40+ startup homepages this year.
+
+Here's the section order that converts best. Steal it:
+
+<strong>Section 1: Hero</strong>
+Outcome headline + 1-line sub (who it's for) + single CTA + social proof number (users, customers, or rating)
+
+<strong>Section 2: Problem Agitation</strong>
+3 bullets. The pain your ICP feels right now. Written in their words — not your product language.
+
+<strong>Section 3: Solution Overview</strong>
+How you solve it. Feature names are okay here — but always paired with the outcome.
+
+<strong>Section 4: Social Proof</strong>
+3 testimonials with: Name + Title + Company + one measurable outcome. Not "Great product!" quotes.
+
+<strong>Section 5: How It Works</strong>
+3–4 step visual. Reduce the perceived effort of getting started.
+
+<strong>Section 6: Objection Handling</strong>
+FAQ section answering the top 3 reasons someone wouldn't buy. Schema-marked up.
+
+<strong>Section 7: Final CTA</strong>
+Repeat the primary CTA. Add urgency or incentive if you have one.
+
+That's it. 7 sections. Proven order.
+
+Save this. Use it in your next site refresh.
+
+What section is most broken on your current homepage?</div>
+          <div class="hashtag-row">#HomepageDesign #CRO #StartupMarketing #WebDesign #GrowthHacking</div>
+          <div class="cta-row"><span class="cta-chip">Framework bait</span><span class="cta-chip">Comment driver</span></div>
+          <div class="expand-hint">Click again to collapse</div>
+        </div>
+      </div>
+
+      <div class="post-card" data-type="case" onclick="toggleCard(this)">
+        <div class="card-top">
+          <span class="card-day">Wednesday</span>
+          <span class="card-type type-case">Case Study</span>
+        </div>
+        <div class="card-hook">We rewrote one headline. The client's demo bookings doubled in 3 weeks.</div>
+        <div class="card-angle">Micro case study — shows the power of copy + design together</div>
+        <div class="card-format"><span>📊</span> Specific result story</div>
+        <div class="card-expand">
+          <div class="card-expand-body">One headline rewrite. 3 weeks. 2x demo bookings.
+
+Here's exactly what we changed — and why it worked:
+
+<strong>Old headline:</strong>
+"The AI-powered platform for modern revenue teams"
+
+(Feature-led. Generic. Could be any SaaS product from 2019 to 2025.)
+
+<strong>New headline:</strong>
+"Your sales team closes more deals when they know exactly who to call next"
+
+(Outcome-led. Specific. Written in the sales rep's language — not the founder's language.)
+
+Why the old one failed:
+→ "AI-powered" is table stakes now — not a differentiator
+→ "Modern revenue teams" means nothing to someone who just needs to hit quota
+→ The visitor had to translate the feature into a benefit themselves. Most don't.
+
+Why the new one worked:
+→ It speaks to the salesperson, not the VP (who is often the buyer but rarely the user)
+→ It describes an outcome the rep actually cares about
+→ "Exactly who to call next" — specificity creates credibility
+
+The design stayed the same. The traffic stayed the same.
+
+The headline changed.
+
+Copywriting is design. Design is copywriting.
+
+When did you last rewrite your homepage headline?</div>
+          <div class="hashtag-row">#Copywriting #CRO #HomepageOptimization #SalesGrowth #StartupMarketing</div>
+          <div class="cta-row"><span class="cta-chip">Specific proof</span><span class="cta-chip">Question CTA</span></div>
+          <div class="expand-hint">Click again to collapse</div>
+        </div>
+      </div>
+
+      <div class="post-card" data-type="edu" onclick="toggleCard(this)">
+        <div class="card-top">
+          <span class="card-day">Thursday</span>
+          <span class="card-type type-edu">Education</span>
+        </div>
+        <div class="card-hook">Why your startup's mobile experience is silently destroying your SEO — and 4 fixes</div>
+        <div class="card-angle">Practical SEO/design crossover — relevant to every startup with a website</div>
+        <div class="card-format"><span>📋</span> Problem + fixes format</div>
+        <div class="card-expand">
+          <div class="card-expand-body">Google uses your mobile site to rank your desktop site.
+
+Not the other way around.
+
+Mobile-first indexing has been default since 2020. But most startup sites I audit are still built desktop-first — with mobile as an afterthought.
+
+Here's what that costs you in SEO:
+
+→ Images not compressed for mobile = LCP above 3s = ranking penalty
+→ Text too small for mobile tap targets = high bounce = lower engagement signals
+→ Nav menus that break on small screens = Googlebot can't crawl your pages properly
+→ CTAs hidden below the fold on mobile = conversions drop 60%+
+
+4 fixes that take less than a week:
+
+<strong>1.</strong> Run your site through Google's PageSpeed Insights on mobile — not desktop. Fix the red items first.
+
+<strong>2.</strong> Audit your tap targets. Every button should be at least 44x44px. Zoom in on your phone and tap around.
+
+<strong>3.</strong> Check your font size — minimum 16px body text on mobile. Anything smaller and Google flags it.
+
+<strong>4.</strong> Test your CTA placement on iPhone 12 screen size specifically. Is your primary action visible without scrolling?
+
+Design for the phone in your customer's hand. Rank accordingly.
+
+What's your current mobile PageSpeed score?</div>
+          <div class="hashtag-row">#MobileSEO #TechnicalSEO #WebDesign #StartupGrowth #PageSpeed</div>
+          <div class="cta-row"><span class="cta-chip">Tactical value</span><span class="cta-chip">SEO authority</span></div>
+          <div class="expand-hint">Click again to collapse</div>
+        </div>
+      </div>
+
+      <div class="post-card" data-type="engage" onclick="toggleCard(this)">
+        <div class="card-top">
+          <span class="card-day">Friday</span>
+          <span class="card-type type-engage">Engagement</span>
+        </div>
+        <div class="card-hook">Which startup website mistake have you seen the most? Real answers only.</div>
+        <div class="card-angle">Community engagement — builds rapport + generates user content</div>
+        <div class="card-format"><span>🤝</span> Comment engagement post</div>
+        <div class="card-expand">
+          <div class="card-expand-body">Friday confession booth for founders and marketers 👇
+
+What's the most common startup website mistake you keep seeing?
+
+I'll go first:
+
+Homepages that lead with "We are a [adjective] [category] platform that helps [broad audience] [vague outcome]."
+
+Every. Single. Time.
+
+Your turn. Drop your #1 most-seen website mistake below.
+
+Bonus points if you share a (nicely anonymous) example.
+
+Best answer gets a free mini-audit from me. No strings. Just good internet karma.</div>
+          <div class="hashtag-row">#StartupMarketing #WebDesign #FounderLife #GrowthMarketing</div>
+          <div class="cta-row"><span class="cta-chip">Community</span><span class="cta-chip">Free value</span></div>
+          <div class="expand-hint">Click again to collapse</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- WEEK 4 -->
+  <div class="week-block">
+    <div class="week-header">
+      <span class="week-label">Week 4</span>
+      <span class="week-theme">🌱 "Compounding Growth"</span>
+      <div class="week-line"></div>
+    </div>
+    <div class="posts-grid">
+
+      <div class="post-card" data-type="thought" onclick="toggleCard(this)">
+        <div class="card-top">
+          <span class="card-day">Monday</span>
+          <span class="card-type type-thought">Thought Leadership</span>
+        </div>
+        <div class="card-hook">The best growth marketing channel for a startup is the one you consistently execute. Fight me.</div>
+        <div class="card-angle">Anti-FOMO take — resonates hard with overwhelmed founders</div>
+        <div class="card-format"><span>📝</span> Conviction post</div>
+        <div class="card-expand">
+          <div class="card-expand-body">Every month there's a new "growth hack."
+
+Founders sprint toward it. Burn energy. Move to the next one.
+
+Here's what I've learned working with early-stage startups:
+
+The channel you execute consistently for 90 days beats every shiny new tactic every time.
+
+SEO takes 6 months. LinkedIn compounds slowly. Email nurture is boring. Content feels unrewarding in week 2.
+
+But the startup that commits to one channel and optimizes it relentlessly?
+
+They win.
+
+Here's why this matters for design:
+
+Every growth channel has a design problem underneath it.
+
+→ SEO fails because the site structure doesn't match how people search
+→ LinkedIn underperforms because the content visuals are weak
+→ Email gets deleted because the landing page doesn't follow through on the promise
+
+Growth is a systems problem. Design is the system.
+
+Pick one channel. Fix the design underneath it. Execute for 90 days. Then evaluate.
+
+What channel are you committed to right now?</div>
+          <div class="hashtag-row">#GrowthMarketing #StartupStrategy #ContentMarketing #Founders #GrowthMindset</div>
+          <div class="cta-row"><span class="cta-chip">Conviction post</span><span class="cta-chip">Debate starter</span></div>
+          <div class="expand-hint">Click again to collapse</div>
+        </div>
+      </div>
+
+      <div class="post-card" data-type="edu" onclick="toggleCard(this)">
+        <div class="card-top">
+          <span class="card-day">Tuesday</span>
+          <span class="card-type type-edu">Education</span>
+        </div>
+        <div class="card-hook">How to build a 90-day growth roadmap for your startup website in 3 hours</div>
+        <div class="card-angle">Flagship how-to — the most-saved post of the month</div>
+        <div class="card-format"><span>📋</span> Step-by-step guide — carousel or long-form text</div>
+        <div class="card-expand">
+          <div class="card-expand-body">You don't need a full agency to get clarity on your growth priorities.
+
+Here's how to build your own 90-day website roadmap in 3 hours:
+
+<strong>Hour 1: Audit (60 min)</strong>
+Open Google Search Console. Find your top 10 landing pages by impressions.
+For each: What's the click-through rate? What's the conversion rate?
+Most founders discover 1–2 high-impression pages with terrible CTR — that's your quick win.
+
+<strong>Hour 2: Prioritise (60 min)</strong>
+Sort findings into 3 buckets:
+• Week 1–2: Copy changes, CTA placement, above-fold fixes
+• Month 2: Schema markup, blog interlinking, mobile speed
+• Month 3: New landing pages, programmatic content, case studies
+
+Prioritise by: impact × effort. High impact, low effort goes first. Always.
+
+<strong>Hour 3: Document + Assign (60 min)</strong>
+One Google Doc. One table. Each row: Problem / Fix / Owner / Timeline / Success Metric.
+Share it with your dev and content team. Book a weekly 15-min check-in.
+
+That's it.
+
+No agency needed to get started.
+
+But if you want us to do it with you — DM me "roadmap" and I'll share what our 60-min live audit session looks like.</div>
+          <div class="hashtag-row">#GrowthStrategy #StartupMarketing #ContentMarketing #SEO #Roadmap</div>
+          <div class="cta-row"><span class="cta-chip">Lead gen CTA</span><span class="cta-chip">Flagship content</span></div>
+          <div class="expand-hint">Click again to collapse</div>
+        </div>
+      </div>
+
+      <div class="post-card" data-type="case" onclick="toggleCard(this)">
+        <div class="card-top">
+          <span class="card-day">Wednesday</span>
+          <span class="card-type type-case">Case Study</span>
+        </div>
+        <div class="card-hook">Month 1 vs Month 4: What compounding design-led SEO actually looks like</div>
+        <div class="card-angle">Long-game proof — builds trust with founders who've been burned before</div>
+        <div class="card-format"><span>📊</span> Timeline result story</div>
+        <div class="card-expand">
+          <div class="card-expand-body">Nobody tells you how slow design-led SEO feels in Month 1.
+
+Here's what the real timeline looked like for one of our startup clients:
+
+<strong>Month 1:</strong>
+Technical SEO fix (page speed, schema, crawlability). Zero visible traffic change.
+Homepage redesigned. Headline rewritten. Conversion rate goes from 0.8% to 1.9%.
+Founders are skeptical. We stay calm.
+
+<strong>Month 2:</strong>
+First 4 SEO-optimized blog posts published. Search Console starts showing keyword impressions.
+Email capture added above fold. List starts growing at 40 subscribers/week.
+Competitors haven't noticed. Good.
+
+<strong>Month 3:</strong>
+Blog posts start ranking on page 2 for target keywords.
+Organic traffic up 34%. Trial signups up 41%.
+Founders are excited. We remind them this is just the start.
+
+<strong>Month 4:</strong>
+2 blog posts reach page 1. One drives 40% of all organic leads.
+MoM organic growth: 28%. CAC from organic: $0.
+Founders are now believers.
+
+This is what compounding looks like.
+
+It's quiet for 6 weeks. Then it's hard to stop.
+
+Are you willing to invest in Month 1 to get to Month 4?</div>
+          <div class="hashtag-row">#SEOResults #OrganicGrowth #StartupGrowth #ContentMarketing #DesignROI</div>
+          <div class="cta-row"><span class="cta-chip">Long-game proof</span><span class="cta-chip">Trust builder</span></div>
+          <div class="expand-hint">Click again to collapse</div>
+        </div>
+      </div>
+
+      <div class="post-card" data-type="brand" onclick="toggleCard(this)">
+        <div class="card-top">
+          <span class="card-day">Thursday</span>
+          <span class="card-type type-brand">Brand & Culture</span>
+        </div>
+        <div class="card-hook">What we've learned from 40 startup website audits this year — the honest version</div>
+        <div class="card-angle">Retrospective / transparency post — humanizes and builds authority</div>
+        <div class="card-format"><span>✍️</span> Reflections post — long-form narrative</div>
+        <div class="card-expand">
+          <div class="card-expand-body">We've audited 40+ startup websites this year.
+
+Here's the honest version of what we've learned:
+
+<strong>1. Most startups know what's broken.</strong>
+They just don't have time to fix it. The audit validates what they already suspected. Our job is to prioritize it and move fast.
+
+<strong>2. The worst websites are often from the smartest founders.</strong>
+They're so close to the product that they can't see it from a visitor's perspective. Too much knowledge is a design liability.
+
+<strong>3. Speed of execution beats perfection every time.</strong>
+A 7/10 homepage launched in 2 weeks outperforms a 10/10 homepage that's been "in progress" for 3 months.
+
+<strong>4. SEO and design are not separate disciplines.</strong>
+Every time we've treated them as one integrated system, results compound. Every time we've separated them, one suffers.
+
+<strong>5. The founders who grow fastest trust the process.</strong>
+Not blindly — they ask great questions. But they execute fast and measure honestly.
+
+We're grateful for every founder who's trusted us with their site this year.
+
+The best part of this work? Seeing Month 4 after a hard Month 1.
+
+What are you building right now that's in its hard Month 1?</div>
+          <div class="hashtag-row">#AgencyLife #StartupMarketing #Founders #Growth #GrowthMarketing</div>
+          <div class="cta-row"><span class="cta-chip">Authentic voice</span><span class="cta-chip">Community warmth</span></div>
+          <div class="expand-hint">Click again to collapse</div>
+        </div>
+      </div>
+
+      <div class="post-card" data-type="thought" onclick="toggleCard(this)">
+        <div class="card-top">
+          <span class="card-day">Friday</span>
+          <span class="card-type type-thought">Thought Leadership</span>
+        </div>
+        <div class="card-hook">The most underrated growth channel for early-stage startups isn't SEO. It's your existing customers.</div>
+        <div class="card-angle">Closing POV for the month — reframes growth conversation</div>
+        <div class="card-format"><span>📝</span> Provocative closer</div>
+        <div class="card-expand">
+          <div class="card-expand-body">We talk a lot about acquiring new customers.
+
+But here's what I've seen drive the fastest growth for early-stage startups:
+
+Turning existing customers into case studies.
+
+Not testimonials. Not "great to work with" quotes.
+
+Actual case studies.
+
+The format: Problem → Context → What changed → Measurable result → Direct quote from the person who experienced it.
+
+Why this works better than almost any other marketing asset:
+
+→ It proves you solve real problems (not theoretical ones)
+→ It speaks to future customers who see themselves in the story
+→ Google loves case study content — original data, unique narrative, specific outcomes
+→ AI search engines cite it because it's the kind of source they trust
+
+One well-written case study, properly designed and published, outperforms 6 months of generic blog content.
+
+And if you have even 3 happy customers right now — you have everything you need to start.
+
+Go write one this weekend.
+
+If you want our case study format, DM me "case study" and I'll send it over.</div>
+          <div class="hashtag-row">#CaseStudy #ContentMarketing #StartupGrowth #GrowthMarketing #CustomerSuccess</div>
+          <div class="cta-row"><span class="cta-chip">DM lead gen</span><span class="cta-chip">Month closer</span></div>
+          <div class="expand-hint">Click again to collapse</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Prepared by <a href="https://vage.in" target="_blank">Clea.design</a> for <a href="https://clea.design" target="_blank">Clea Design</a> · April 2025 · All post drafts are starting points — adapt voice, examples, and results to your actual client work.
+</div>
+
+<script>
+  function toggleCard(card) {
+    card.classList.toggle('expanded');
+  }
+
+  function filterCards(type) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+
+    document.querySelectorAll('.post-card').forEach(card => {
+      if (type === 'all' || card.dataset.type === type) {
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+  }
+</script>
+</body>
+</html>
